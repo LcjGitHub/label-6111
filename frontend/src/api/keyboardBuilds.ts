@@ -7,10 +7,11 @@ const client = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-export async function fetchKeyboardBuilds(keyboardName?: string): Promise<KeyboardBuild[]> {
-  const { data } = await client.get<KeyboardBuild[]>('/keyboard-builds', {
-    params: keyboardName ? { keyboard_name: keyboardName } : undefined,
-  });
+export async function fetchKeyboardBuilds(params?: {
+  keyboard_name?: string;
+  keycap_id?: number;
+}): Promise<KeyboardBuild[]> {
+  const { data } = await client.get<KeyboardBuild[]>('/keyboard-builds', { params });
   return data;
 }
 

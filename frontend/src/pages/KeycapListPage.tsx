@@ -91,7 +91,7 @@ export default function KeycapListPage() {
     {
       title: '操作',
       key: 'actions',
-      width: 220,
+      width: 280,
       render: (_, record) => (
         <Space>
           <Link to={`/keycaps/${record.id}`} style={{ color: '#1677ff' }}>
@@ -100,6 +100,12 @@ export default function KeycapListPage() {
           <Button type="link" onClick={() => navigate(`/keycaps/${record.id}/edit`)}>
             编辑
           </Button>
+          <Link
+            to={`/keyboard-builds?keycap_id=${record.id}`}
+            style={{ color: '#1677ff' }}
+          >
+            查看配装
+          </Link>
           <Popconfirm title="确定删除？" onConfirm={() => handleDelete(record.id)}>
             <Button type="link" danger>
               删除

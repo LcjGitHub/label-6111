@@ -326,6 +326,7 @@ def convert_wishlist_to_keycap(wishlist_id: int, db: DbSession):
 def list_keyboard_builds(
     db: DbSession,
     keyboard_name: str | None = Query(default=None, description="按键盘名称搜索"),
+    keycap_id: int | None = Query(default=None, description="按键帽ID筛选"),
 ):
     query = db.query(
         KeyboardBuild,
@@ -334,6 +335,8 @@ def list_keyboard_builds(
     ).join(Keycap, KeyboardBuild.keycap_id == Keycap.id)
     if keyboard_name:
         query = query.filter(KeyboardBuild.keyboard_name.ilike(f"%{keyboard_name}%"))
+    if keycap_id is not None:
+        query = query.filter(KeyboardBuild.keycap_id == keycap_id)
     results = query.order_by(KeyboardBuild.install_date.desc(), KeyboardBuild.id.desc()).all()
     return [
         {

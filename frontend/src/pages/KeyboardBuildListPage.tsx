@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Button,
   Input,
@@ -21,23 +21,40 @@ const { Title } = Typography;
 
 export default function KeyboardBuildListPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<KeyboardBuild[]>([]);
-  const [search, setSearch] = useState('');
-  const [query, setQuery] = useState('');
+  const initialKeyboardName = searchParams.get('keyboard_name') || '';
+  const initialKeycapId = searchParams.get('keycap_id') || '';
+  const [search, setSearch] = useState(initialKeyboardName);
+  const [keyboardNameQuery, setKeyboardNameQuery] = useState(initialKeyboardName);
+  const [keycapIdQuery, setKeycapIdQuery] = useState(initialKeycapId);
+
+  useEffect(() => {
+    const keyboardName = searchParams.get('keyboard_name') || '';
+    const keycapId = searchParams.get('keycap_id') || '';
+    setSearch(keyboardName);
+    setKeyboardNameQuery(keyboardName);
+    setKeycapIdQuery(keycapId);
+  }, [searchParams]);
 
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const items = await fetchKeyboardBuilds(query || undefined);
+      const params: { keyboard_name?: string; keycap_id?: number } = {};
+      if (keyboardNameQuery) params.keyboard_name = keyboardNameQuery;
+      if (keycapIdQuery) params.keycap_id = Number(keycapIdQuery);
+      const items = await fetchKeyboardBuilds(
+        Object.keys(params).length > 0 ? params : undefined,
+      );
       setData(items);
     } catch {
       messageApi.error('加载配装记录列表失败');
     } finally {
       setLoading(false);
     }
-  }, [messageApi, query]);
+  }, [messageApi, keyboardNameQuery, keycapIdQuery]);
 
   useEffect(() => {
     loadData();
@@ -116,15 +133,28 @@ export default function KeyboardBuildListPage() {
             新增配装
           </Button>
         </Space>
-        <Input.Search
-          placeholder="按键盘名称搜索"
-          allowClear
-          enterButton={<SearchOutlined />}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onSearch={(value) => setQuery(value.trim())}
-          style={{ maxWidth: 360 }}
-        />
+        <Space wrap>
+          <Input.Search
+            placeholder="按键盘名称搜索"
+            allowClear
+            enterButton={<SearchOutlined />}
+            value={search}
+            onChange={(e) => {
+              const value = e.target.value;
+              setSearch(value);
+              if (!value) {
+                setKeyboardNameQuery('');
+              }
+            }}
+            onSearch={(value) => setKeyboardNameQuery(value.trim())}
+            style={{ width: 260 }}
+          />
+          {keycapIdQuery && (
+            <Tag closable onClose={() => setKeycapIdQuery('')}>
+              键帽编号: {keycapIdQuery}
+            </Tag>
+          )}
+        </Space>
         <Table
           rowKey="id"
           loading={loading}
