@@ -21,7 +21,7 @@ const { Title } = Typography;
 
 export default function KeyboardBuildListPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<KeyboardBuild[]>([]);
@@ -30,6 +30,13 @@ export default function KeyboardBuildListPage() {
   const [search, setSearch] = useState(initialKeyboardName);
   const [keyboardNameQuery, setKeyboardNameQuery] = useState(initialKeyboardName);
   const [keycapIdQuery, setKeycapIdQuery] = useState(initialKeycapId);
+
+  const clearKeycapIdFilter = useCallback(() => {
+    setKeycapIdQuery('');
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete('keycap_id');
+    setSearchParams(newParams);
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
     const keyboardName = searchParams.get('keyboard_name') || '';
@@ -150,7 +157,7 @@ export default function KeyboardBuildListPage() {
             style={{ width: 260 }}
           />
           {keycapIdQuery && (
-            <Tag closable onClose={() => setKeycapIdQuery('')}>
+            <Tag closable onClose={clearKeycapIdFilter}>
               键帽编号: {keycapIdQuery}
             </Tag>
           )}

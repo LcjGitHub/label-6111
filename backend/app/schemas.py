@@ -56,6 +56,7 @@ class KeycapResponse(KeycapBase):
     id: int
     created_at: datetime
     updated_at: datetime
+    keyboard_build_count: int = 0
 
 
 class WishlistBase(BaseModel):

@@ -8,6 +8,7 @@ export interface Keycap {
   notes: string | null;
   created_at: string;
   updated_at: string;
+  keyboard_build_count: number;
 }
 
 export interface KeycapFormValues {

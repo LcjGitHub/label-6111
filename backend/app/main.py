@@ -146,14 +146,39 @@ def list_keycaps(
     brand: str | None = Query(default=None, description="按品牌搜索"),
     material: str | None = Query(default=None, description="按材质搜索"),
 ):
-    query = db.query(Keycap)
+    build_count_subq = (
+        db.query(
+            KeyboardBuild.keycap_id.label("keycap_id"),
+            func.count(KeyboardBuild.id).label("count"),
+        )
+        .group_by(KeyboardBuild.keycap_id)
+        .subquery()
+    )
+
+    query = db.query(
+        Keycap,
+        func.coalesce(build_count_subq.c.count, 0).label("keyboard_build_count"),
+    ).outerjoin(
+        build_count_subq,
+        Keycap.id == build_count_subq.c.keycap_id,
+    )
+
     if color_scheme:
         query = query.filter(Keycap.color_scheme.ilike(f"%{color_scheme}%"))
     if brand:
         query = query.filter(Keycap.brand.ilike(f"%{brand}%"))
     if material:
         query = query.filter(Keycap.material.ilike(f"%{material}%"))
-    return query.order_by(Keycap.id.desc()).all()
+
+    results = query.order_by(Keycap.id.desc()).all()
+
+    return [
+        {
+            **keycap.__dict__,
+            "keyboard_build_count": keyboard_build_count,
+        }
+        for keycap, keyboard_build_count in results
+    ]
 
 
 @app.get("/api/keycaps/stats", response_model=KeycapStats)
@@ -204,10 +229,19 @@ def get_keycap_stats(db: DbSession):
 
 @app.get("/api/keycaps/{keycap_id}", response_model=KeycapResponse)
 def get_keycap(keycap_id: int, db: DbSession):
+    build_count = (
+        db.query(func.count(KeyboardBuild.id))
+        .filter(KeyboardBuild.keycap_id == keycap_id)
+        .scalar()
+        or 0
+    )
     keycap = db.get(Keycap, keycap_id)
     if not keycap:
         raise HTTPException(status_code=404, detail="键帽不存在")
-    return keycap
+    return {
+        **keycap.__dict__,
+        "keyboard_build_count": build_count,
+    }
 
 
 @app.post("/api/keycaps", response_model=KeycapResponse, status_code=201)
