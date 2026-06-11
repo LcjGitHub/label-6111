@@ -60,6 +60,26 @@ export default function BrandListPage() {
       render: (text: string) => <Tag color="blue">{text}</Tag>,
     },
     {
+      title: '键帽数量',
+      dataIndex: 'keycap_count',
+      key: 'keycap_count',
+      width: 120,
+      render: (value: number, record) =>
+        value > 0 ? (
+          <a
+            onClick={(e) => {
+              e.preventDefault();
+              navigate(`/keycaps?brand=${encodeURIComponent(record.name)}`);
+            }}
+            style={{ fontWeight: 600 }}
+          >
+            {value}
+          </a>
+        ) : (
+          <span style={{ color: '#999' }}>0</span>
+        ),
+    },
+    {
       title: '产地',
       dataIndex: 'origin',
       key: 'origin',

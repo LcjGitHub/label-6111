@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Button,
   Input,
@@ -19,14 +19,16 @@ const { Title } = Typography;
 
 export default function KeycapListPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<Keycap[]>([]);
+  const initialBrand = searchParams.get('brand') || '';
   const [colorSchemeSearch, setColorSchemeSearch] = useState('');
-  const [brandSearch, setBrandSearch] = useState('');
+  const [brandSearch, setBrandSearch] = useState(initialBrand);
   const [materialSearch, setMaterialSearch] = useState('');
   const [colorSchemeQuery, setColorSchemeQuery] = useState('');
-  const [brandQuery, setBrandQuery] = useState('');
+  const [brandQuery, setBrandQuery] = useState(initialBrand);
   const [materialQuery, setMaterialQuery] = useState('');
 
   const loadData = useCallback(async () => {

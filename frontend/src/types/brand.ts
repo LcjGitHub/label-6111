@@ -4,6 +4,7 @@ export interface Brand {
   origin: string | null;
   website: string | null;
   notes: string | null;
+  keycap_count: number;
 }
 
 export interface BrandFormValues {

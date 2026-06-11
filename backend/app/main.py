@@ -63,10 +63,35 @@ def list_brands(
     db: DbSession,
     name: str | None = Query(default=None, description="按品牌名称搜索"),
 ):
-    query = db.query(Brand)
+    keycap_count_subq = (
+        db.query(
+            Keycap.brand.label("brand_name"),
+            func.count(Keycap.id).label("count"),
+        )
+        .group_by(Keycap.brand)
+        .subquery()
+    )
+
+    query = db.query(
+        Brand,
+        func.coalesce(keycap_count_subq.c.count, 0).label("keycap_count"),
+    ).outerjoin(
+        keycap_count_subq,
+        Brand.name == keycap_count_subq.c.brand_name,
+    )
+
     if name:
         query = query.filter(Brand.name.ilike(f"%{name}%"))
-    return query.order_by(Brand.id.desc()).all()
+
+    results = query.order_by(Brand.id.desc()).all()
+
+    return [
+        {
+            **brand.__dict__,
+            "keycap_count": keycap_count,
+        }
+        for brand, keycap_count in results
+    ]
 
 
 @app.get("/api/brands/{brand_id}", response_model=BrandResponse)
