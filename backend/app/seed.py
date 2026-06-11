@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import Session
 
-from app.models import Brand, Keycap, KeyboardBuild, KeyboardDevice, Wishlist
+from app.models import Brand, GroupBuy, Keycap, KeyboardBuild, KeyboardDevice, Wishlist
 
 SEED_DATA = [
     {
@@ -174,4 +174,43 @@ def seed_keyboard_devices(db: Session) -> None:
         return
     for item in KEYBOARD_DEVICE_SEED_DATA:
         db.add(KeyboardDevice(**item))
+    db.commit()
+
+
+GROUPBUY_SEED_DATA = [
+    {
+        "product_name": "GMK Laser 团购",
+        "brand": "GMK",
+        "platform": "Drop",
+        "pre_sale_price": 1099.0,
+        "end_date": datetime(2026, 7, 15),
+        "status": "待付款",
+        "notes": "赛博朋克激光配色，经典款再团",
+    },
+    {
+        "product_name": "SA 1976 团购",
+        "brand": "SP",
+        "platform": "zFrontier",
+        "pre_sale_price": 1280.0,
+        "end_date": datetime(2026, 6, 30),
+        "status": "已付款",
+        "notes": "复古彩虹配色，球帽高度，已付款等待发货",
+    },
+    {
+        "product_name": "GMK Dracula 团购",
+        "brand": "GMK",
+        "platform": "Drop",
+        "pre_sale_price": 950.0,
+        "end_date": datetime(2026, 5, 20),
+        "status": "已收货",
+        "notes": "暗夜紫粉配色，已收到货，品质不错",
+    },
+]
+
+
+def seed_groupbuys(db: Session) -> None:
+    if db.query(GroupBuy).count() > 0:
+        return
+    for item in GROUPBUY_SEED_DATA:
+        db.add(GroupBuy(**item))
     db.commit()

@@ -4,6 +4,8 @@ import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
 import BrandFormPage from './pages/BrandFormPage';
 import BrandListPage from './pages/BrandListPage';
+import GroupBuyFormPage from './pages/GroupBuyFormPage';
+import GroupBuyListPage from './pages/GroupBuyListPage';
 import KeyboardBuildFormPage from './pages/KeyboardBuildFormPage';
 import KeyboardBuildListPage from './pages/KeyboardBuildListPage';
 import KeyboardDeviceFormPage from './pages/KeyboardDeviceFormPage';
@@ -22,17 +24,19 @@ export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const selectedKey = location.pathname.startsWith('/keyboard-devices')
-    ? '/keyboard-devices'
-    : location.pathname.startsWith('/keyboard-builds')
-      ? '/keyboard-builds'
-      : location.pathname.startsWith('/wishlists')
-        ? '/wishlists'
-        : location.pathname.startsWith('/brands')
-          ? '/brands'
-          : location.pathname.startsWith('/stats')
-            ? '/stats'
-            : '/';
+  const selectedKey = location.pathname.startsWith('/groupbuys')
+    ? '/groupbuys'
+    : location.pathname.startsWith('/keyboard-devices')
+      ? '/keyboard-devices'
+      : location.pathname.startsWith('/keyboard-builds')
+        ? '/keyboard-builds'
+        : location.pathname.startsWith('/wishlists')
+          ? '/wishlists'
+          : location.pathname.startsWith('/brands')
+            ? '/brands'
+            : location.pathname.startsWith('/stats')
+              ? '/stats'
+              : '/';
 
   const menuItems: MenuProps['items'] = [
     {
@@ -49,6 +53,11 @@ export default function App() {
       key: '/keyboard-builds',
       label: '配装记录',
       onClick: () => navigate('/keyboard-builds'),
+    },
+    {
+      key: '/groupbuys',
+      label: '团购跟踪',
+      onClick: () => navigate('/groupbuys'),
     },
     {
       key: '/stats',
@@ -104,6 +113,9 @@ export default function App() {
           <Route path="/keyboard-builds" element={<KeyboardBuildListPage />} />
           <Route path="/keyboard-builds/new" element={<KeyboardBuildFormPage />} />
           <Route path="/keyboard-builds/:id/edit" element={<KeyboardBuildFormPage />} />
+          <Route path="/groupbuys" element={<GroupBuyListPage />} />
+          <Route path="/groupbuys/new" element={<GroupBuyFormPage />} />
+          <Route path="/groupbuys/:id/edit" element={<GroupBuyFormPage />} />
           <Route path="/stats" element={<StatsPage />} />
           <Route path="/wishlists" element={<WishlistListPage />} />
           <Route path="/wishlists/new" element={<WishlistFormPage />} />

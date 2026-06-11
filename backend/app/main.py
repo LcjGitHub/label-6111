@@ -4,12 +4,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine, get_db
 from app.migrations import run_migrations
 from app.routers.brands import router as brands_router
+from app.routers.groupbuys import router as groupbuys_router
 from app.routers.keyboard_builds import router as keyboard_builds_router
 from app.routers.keyboard_devices import router as keyboard_devices_router
 from app.routers.keycaps import router as keycaps_router
 from app.routers.wishlists import router as wishlists_router
 from app.seed import (
     seed_brands,
+    seed_groupbuys,
     seed_keycaps,
     seed_keyboard_builds,
     seed_keyboard_devices,
@@ -38,6 +40,7 @@ def on_startup() -> None:
         seed_brands(db)
         seed_keyboard_builds(db)
         seed_keyboard_devices(db)
+        seed_groupbuys(db)
     finally:
         db.close()
 
@@ -52,3 +55,4 @@ app.include_router(keycaps_router)
 app.include_router(wishlists_router)
 app.include_router(keyboard_builds_router)
 app.include_router(keyboard_devices_router)
+app.include_router(groupbuys_router)

@@ -68,3 +68,16 @@ class KeyboardDevice(Base):
     switch_type: Mapped[str] = mapped_column(String(100), nullable=False)
     purchase_date: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+
+class GroupBuy(Base):
+    __tablename__ = "groupbuys"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    product_name: Mapped[str] = mapped_column(String(200), nullable=False)
+    brand: Mapped[str] = mapped_column(String(100), nullable=False)
+    platform: Mapped[str] = mapped_column(String(100), nullable=False)
+    pre_sale_price: Mapped[float | None] = mapped_column(Float, nullable=True)
+    end_date: Mapped[datetime] = mapped_column(DateTime, nullable=False, index=True)
+    status: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)

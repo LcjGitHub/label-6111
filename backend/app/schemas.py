@@ -158,3 +158,33 @@ class KeyboardDeviceResponse(KeyboardDeviceBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+
+
+class GroupBuyBase(BaseModel):
+    product_name: str = Field(..., min_length=1, max_length=200)
+    brand: str = Field(..., min_length=1, max_length=100)
+    platform: str = Field(..., min_length=1, max_length=100)
+    pre_sale_price: float | None = Field(default=None, ge=0)
+    end_date: datetime
+    status: str = Field(..., min_length=1, max_length=20)
+    notes: str | None = None
+
+
+class GroupBuyCreate(GroupBuyBase):
+    pass
+
+
+class GroupBuyUpdate(BaseModel):
+    product_name: str | None = Field(default=None, min_length=1, max_length=200)
+    brand: str | None = Field(default=None, min_length=1, max_length=100)
+    platform: str | None = Field(default=None, min_length=1, max_length=100)
+    pre_sale_price: float | None = Field(default=None, ge=0)
+    end_date: datetime | None = None
+    status: str | None = Field(default=None, min_length=1, max_length=20)
+    notes: str | None = None
+
+
+class GroupBuyResponse(GroupBuyBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
