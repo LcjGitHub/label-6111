@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.models import Keycap
+from app.models import Keycap, Wishlist
 
 SEED_DATA = [
     {
@@ -45,10 +45,45 @@ SEED_DATA = [
     },
 ]
 
+WISHLIST_SEED_DATA = [
+    {
+        "name": "Laser",
+        "brand": "GMK",
+        "color_scheme": "Cyan Magenta",
+        "expected_price": 1100.0,
+        "priority": 5,
+        "notes": "赛博朋克激光配色，优先级最高",
+    },
+    {
+        "name": "Botanical",
+        "brand": "GMK",
+        "color_scheme": "Green Cream",
+        "expected_price": 900.0,
+        "priority": 3,
+        "notes": "植物学绿白配色，清新自然",
+    },
+    {
+        "name": "Mitolet",
+        "brand": "SA",
+        "color_scheme": "Purple Orange",
+        "expected_price": 1200.0,
+        "priority": 4,
+        "notes": "Mito 经典紫橙撞色，球帽高度",
+    },
+]
+
 
 def seed_keycaps(db: Session) -> None:
     if db.query(Keycap).count() > 0:
         return
     for item in SEED_DATA:
         db.add(Keycap(**item))
+    db.commit()
+
+
+def seed_wishlists(db: Session) -> None:
+    if db.query(Wishlist).count() > 0:
+        return
+    for item in WISHLIST_SEED_DATA:
+        db.add(Wishlist(**item))
     db.commit()

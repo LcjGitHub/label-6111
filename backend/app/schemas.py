@@ -27,3 +27,31 @@ class KeycapResponse(KeycapBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+
+
+class WishlistBase(BaseModel):
+    name: str = Field(..., min_length=1, max_length=200)
+    brand: str = Field(..., min_length=1, max_length=100)
+    color_scheme: str = Field(..., min_length=1, max_length=100)
+    expected_price: float | None = Field(default=None, ge=0)
+    priority: int = Field(..., ge=1, le=5)
+    notes: str | None = None
+
+
+class WishlistCreate(WishlistBase):
+    pass
+
+
+class WishlistUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=200)
+    brand: str | None = Field(default=None, min_length=1, max_length=100)
+    color_scheme: str | None = Field(default=None, min_length=1, max_length=100)
+    expected_price: float | None = Field(default=None, ge=0)
+    priority: int | None = Field(default=None, ge=1, le=5)
+    notes: str | None = None
+
+
+class WishlistResponse(WishlistBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
