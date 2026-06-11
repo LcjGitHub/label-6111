@@ -1,4 +1,6 @@
-from sqlalchemy import Float, Integer, String, Text, UniqueConstraint
+from datetime import datetime
+
+from sqlalchemy import DateTime, Float, Integer, String, Text, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
@@ -25,6 +27,12 @@ class Keycap(Base):
     material: Mapped[str] = mapped_column(String(50), nullable=False)
     purchase_price: Mapped[float | None] = mapped_column(Float, nullable=True)
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=func.now(), onupdate=func.now()
+    )
 
 
 class Wishlist(Base):

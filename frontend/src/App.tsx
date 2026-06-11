@@ -4,6 +4,7 @@ import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
 import BrandFormPage from './pages/BrandFormPage';
 import BrandListPage from './pages/BrandListPage';
+import KeycapDetailPage from './pages/KeycapDetailPage';
 import KeycapFormPage from './pages/KeycapFormPage';
 import KeycapListPage from './pages/KeycapListPage';
 import StatsPage from './pages/StatsPage';
@@ -77,6 +78,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<KeycapListPage />} />
           <Route path="/keycaps/new" element={<KeycapFormPage />} />
+          <Route path="/keycaps/:id" element={<KeycapDetailPage />} />
           <Route path="/keycaps/:id/edit" element={<KeycapFormPage />} />
           <Route path="/stats" element={<StatsPage />} />
           <Route path="/wishlists" element={<WishlistListPage />} />

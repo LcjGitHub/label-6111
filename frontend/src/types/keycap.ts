@@ -6,6 +6,8 @@ export interface Keycap {
   material: string;
   purchase_price: number | null;
   notes: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface KeycapFormValues {

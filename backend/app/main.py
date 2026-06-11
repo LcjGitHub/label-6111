@@ -6,6 +6,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import Base, engine, get_db
+from app.migrations import run_migrations
 from app.models import Brand, Keycap, Wishlist
 from app.schemas import (
     BrandCreate,
@@ -39,6 +40,7 @@ def on_startup() -> None:
     Base.metadata.create_all(bind=engine)
     db = next(get_db())
     try:
+        run_migrations(db)
         seed_keycaps(db)
         seed_wishlists(db)
         seed_brands(db)

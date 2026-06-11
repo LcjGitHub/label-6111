@@ -73,9 +73,12 @@ export default function KeycapListPage() {
     {
       title: '操作',
       key: 'actions',
-      width: 160,
+      width: 220,
       render: (_, record) => (
         <Space>
+          <Button type="link" onClick={() => navigate(`/keycaps/${record.id}`)}>
+            查看
+          </Button>
           <Button type="link" onClick={() => navigate(`/keycaps/${record.id}/edit`)}>
             编辑
           </Button>
