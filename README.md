@@ -48,6 +48,32 @@ npm run dev
 
 访问：http://localhost:8101
 
+### 3. Docker 一键启动
+
+在项目根目录执行：
+
+```bash
+docker-compose up -d
+```
+
+启动完成后访问：
+- 前端：http://localhost:8101
+- 后端 API 文档：http://localhost:8000/docs
+
+停止服务：
+
+```bash
+docker-compose down
+```
+
+查看日志：
+
+```bash
+docker-compose logs -f
+```
+
+> SQLite 数据库文件会持久化到宿主机 `./data/keycaps.db`，首次启动自动创建。
+
 ## 功能
 
 - **列表页**：Ant Design Table 展示键帽，支持按配色名搜索
