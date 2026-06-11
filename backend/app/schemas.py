@@ -85,6 +85,35 @@ class WishlistResponse(WishlistBase):
     id: int
 
 
+class KeyboardBuildBase(BaseModel):
+    keyboard_name: str = Field(..., min_length=1, max_length=200)
+    keycap_id: int = Field(..., ge=1)
+    install_date: datetime
+    notes: str | None = None
+
+
+class KeyboardBuildCreate(KeyboardBuildBase):
+    pass
+
+
+class KeyboardBuildUpdate(BaseModel):
+    keyboard_name: str | None = Field(default=None, min_length=1, max_length=200)
+    keycap_id: int | None = Field(default=None, ge=1)
+    install_date: datetime | None = None
+    notes: str | None = None
+
+
+class KeyboardBuildResponse(KeyboardBuildBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+
+
+class KeyboardBuildWithKeycapResponse(KeyboardBuildResponse):
+    keycap_name: str
+    keycap_color_scheme: str
+
+
 class GroupCount(BaseModel):
     name: str
     count: int

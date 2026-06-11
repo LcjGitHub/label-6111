@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from sqlalchemy.orm import Session
 
-from app.models import Brand, Keycap, Wishlist
+from app.models import Brand, Keycap, KeyboardBuild, Wishlist
 
 SEED_DATA = [
     {
@@ -116,4 +118,28 @@ def seed_wishlists(db: Session) -> None:
     for item in WISHLIST_SEED_DATA:
         if item["name"] not in existing_names:
             db.add(Wishlist(**item))
+    db.commit()
+
+
+KEYBOARD_BUILD_SEED_DATA = [
+    {
+        "keyboard_name": "Keychron Q1",
+        "keycap_id": 1,
+        "install_date": datetime(2025, 12, 20),
+        "notes": "首次组装，搭配复古 1976 配色，手感极佳",
+    },
+    {
+        "keyboard_name": "HHKB Professional HYBRID",
+        "keycap_id": 3,
+        "install_date": datetime(2026, 3, 15),
+        "notes": "程序员专属，Dracula 暗夜紫粉配色提升编码心情",
+    },
+]
+
+
+def seed_keyboard_builds(db: Session) -> None:
+    if db.query(KeyboardBuild).count() > 0:
+        return
+    for item in KEYBOARD_BUILD_SEED_DATA:
+        db.add(KeyboardBuild(**item))
     db.commit()
