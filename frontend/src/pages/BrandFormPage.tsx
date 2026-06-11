@@ -6,15 +6,21 @@ import {
   Form,
   Input,
   Space,
+  Spin,
   Typography,
   message,
 } from 'antd';
+import type { AxiosError } from 'axios';
 
 import { createBrand, fetchBrand, updateBrand } from '../api/brands';
 import type { BrandFormValues } from '../types/brand';
 
 const { Title } = Typography;
 const { TextArea } = Input;
+
+interface ErrorResponse {
+  detail?: string;
+}
 
 export default function BrandFormPage() {
   const { id } = useParams();
@@ -44,6 +50,19 @@ export default function BrandFormPage() {
     load();
   }, [form, id, isEdit, messageApi, navigate]);
 
+  const getErrorMessage = (error: unknown): string => {
+    const defaultMsg = isEdit ? '更新失败' : '创建失败';
+    try {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      if (axiosError.response?.data?.detail === '品牌名称已存在') {
+        return '品牌名称已存在';
+      }
+    } catch {
+      // ignore
+    }
+    return defaultMsg;
+  };
+
   const onFinish = async (values: BrandFormValues) => {
     setSubmitting(true);
     try {
@@ -55,23 +74,40 @@ export default function BrandFormPage() {
         messageApi.success('已创建');
       }
       navigate('/brands');
-    } catch {
-      messageApi.error(isEdit ? '更新失败' : '创建失败');
+    } catch (error) {
+      messageApi.error(getErrorMessage(error));
     } finally {
       setSubmitting(false);
     }
   };
 
+  if (loading) {
+    return (
+      <>
+        {contextHolder}
+        <Card style={{ maxWidth: 640 }}>
+          <Space
+            direction="vertical"
+            size="middle"
+            style={{ width: '100%', alignItems: 'center', padding: '40px 0' }}
+          >
+            <Spin size="large" />
+          </Space>
+        </Card>
+      </>
+    );
+  }
+
   return (
     <>
       {contextHolder}
-      <Card loading={loading} style={{ maxWidth: 640 }}>
+      <Card style={{ maxWidth: 640 }}>
         <Title level={3}>{isEdit ? '编辑品牌' : '新增品牌'}</Title>
         <Form
           form={form}
           layout="vertical"
           onFinish={onFinish}
-          disabled={loading}
+          disabled={submitting}
         >
           <Form.Item
             label="品牌名称"
