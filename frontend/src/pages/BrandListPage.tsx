@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Button,
   Input,
@@ -66,15 +66,12 @@ export default function BrandListPage() {
       width: 120,
       render: (value: number, record) =>
         value > 0 ? (
-          <a
-            onClick={(e) => {
-              e.preventDefault();
-              navigate(`/keycaps?brand=${encodeURIComponent(record.name)}`);
-            }}
+          <Link
+            to={`/?brand=${encodeURIComponent(record.name)}`}
             style={{ fontWeight: 600 }}
           >
             {value}
-          </a>
+          </Link>
         ) : (
           <span style={{ color: '#999' }}>0</span>
         ),

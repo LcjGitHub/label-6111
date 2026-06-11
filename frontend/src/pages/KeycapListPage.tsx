@@ -31,6 +31,12 @@ export default function KeycapListPage() {
   const [brandQuery, setBrandQuery] = useState(initialBrand);
   const [materialQuery, setMaterialQuery] = useState('');
 
+  useEffect(() => {
+    const brand = searchParams.get('brand') || '';
+    setBrandSearch(brand);
+    setBrandQuery(brand);
+  }, [searchParams]);
+
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
