@@ -5,9 +5,16 @@ from app.database import Base, engine, get_db
 from app.migrations import run_migrations
 from app.routers.brands import router as brands_router
 from app.routers.keyboard_builds import router as keyboard_builds_router
+from app.routers.keyboard_devices import router as keyboard_devices_router
 from app.routers.keycaps import router as keycaps_router
 from app.routers.wishlists import router as wishlists_router
-from app.seed import seed_brands, seed_keycaps, seed_keyboard_builds, seed_wishlists
+from app.seed import (
+    seed_brands,
+    seed_keycaps,
+    seed_keyboard_builds,
+    seed_keyboard_devices,
+    seed_wishlists,
+)
 
 app = FastAPI(title="Keycap Collection API", version="0.1.0")
 
@@ -30,6 +37,7 @@ def on_startup() -> None:
         seed_wishlists(db)
         seed_brands(db)
         seed_keyboard_builds(db)
+        seed_keyboard_devices(db)
     finally:
         db.close()
 
@@ -43,3 +51,4 @@ app.include_router(brands_router)
 app.include_router(keycaps_router)
 app.include_router(wishlists_router)
 app.include_router(keyboard_builds_router)
+app.include_router(keyboard_devices_router)

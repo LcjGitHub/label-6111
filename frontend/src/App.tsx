@@ -6,6 +6,8 @@ import BrandFormPage from './pages/BrandFormPage';
 import BrandListPage from './pages/BrandListPage';
 import KeyboardBuildFormPage from './pages/KeyboardBuildFormPage';
 import KeyboardBuildListPage from './pages/KeyboardBuildListPage';
+import KeyboardDeviceFormPage from './pages/KeyboardDeviceFormPage';
+import KeyboardDeviceListPage from './pages/KeyboardDeviceListPage';
 import KeycapDetailPage from './pages/KeycapDetailPage';
 import KeycapFormPage from './pages/KeycapFormPage';
 import KeycapListPage from './pages/KeycapListPage';
@@ -20,21 +22,28 @@ export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const selectedKey = location.pathname.startsWith('/keyboard-builds')
-    ? '/keyboard-builds'
-    : location.pathname.startsWith('/wishlists')
-      ? '/wishlists'
-      : location.pathname.startsWith('/brands')
-        ? '/brands'
-        : location.pathname.startsWith('/stats')
-          ? '/stats'
-          : '/';
+  const selectedKey = location.pathname.startsWith('/keyboard-devices')
+    ? '/keyboard-devices'
+    : location.pathname.startsWith('/keyboard-builds')
+      ? '/keyboard-builds'
+      : location.pathname.startsWith('/wishlists')
+        ? '/wishlists'
+        : location.pathname.startsWith('/brands')
+          ? '/brands'
+          : location.pathname.startsWith('/stats')
+            ? '/stats'
+            : '/';
 
   const menuItems: MenuProps['items'] = [
     {
       key: '/',
       label: '键帽收藏',
       onClick: () => navigate('/'),
+    },
+    {
+      key: '/keyboard-devices',
+      label: '键盘设备',
+      onClick: () => navigate('/keyboard-devices'),
     },
     {
       key: '/keyboard-builds',
@@ -89,6 +98,9 @@ export default function App() {
           <Route path="/keycaps/new" element={<KeycapFormPage />} />
           <Route path="/keycaps/:id" element={<KeycapDetailPage />} />
           <Route path="/keycaps/:id/edit" element={<KeycapFormPage />} />
+          <Route path="/keyboard-devices" element={<KeyboardDeviceListPage />} />
+          <Route path="/keyboard-devices/new" element={<KeyboardDeviceFormPage />} />
+          <Route path="/keyboard-devices/:id/edit" element={<KeyboardDeviceFormPage />} />
           <Route path="/keyboard-builds" element={<KeyboardBuildListPage />} />
           <Route path="/keyboard-builds/new" element={<KeyboardBuildFormPage />} />
           <Route path="/keyboard-builds/:id/edit" element={<KeyboardBuildFormPage />} />

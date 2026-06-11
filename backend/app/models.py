@@ -57,3 +57,14 @@ class KeyboardBuild(Base):
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     keycap: Mapped[Keycap] = relationship("Keycap")
+
+
+class KeyboardDevice(Base):
+    __tablename__ = "keyboard_devices"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(200), nullable=False)
+    layout: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
+    switch_type: Mapped[str] = mapped_column(String(100), nullable=False)
+    purchase_date: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)

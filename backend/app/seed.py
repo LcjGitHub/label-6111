@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import Session
 
-from app.models import Brand, Keycap, KeyboardBuild, Wishlist
+from app.models import Brand, Keycap, KeyboardBuild, KeyboardDevice, Wishlist
 
 SEED_DATA = [
     {
@@ -148,4 +148,30 @@ def seed_keyboard_builds(db: Session) -> None:
         build_data = {k: v for k, v in item.items() if k != "keycap_name"}
         build_data["keycap_id"] = keycap.id
         db.add(KeyboardBuild(**build_data))
+    db.commit()
+
+
+KEYBOARD_DEVICE_SEED_DATA = [
+    {
+        "name": "Keychron K2",
+        "layout": "87",
+        "switch_type": "茶轴",
+        "purchase_date": datetime(2025, 6, 15),
+        "notes": "87 配列无线机械键盘，茶轴手感适中，适合办公和游戏",
+    },
+    {
+        "name": "HHKB Professional HYBRID Type-S",
+        "layout": "60",
+        "switch_type": "红轴",
+        "purchase_date": datetime(2025, 11, 20),
+        "notes": "60 配列静电容键盘，红轴静音版，程序员专用神器",
+    },
+]
+
+
+def seed_keyboard_devices(db: Session) -> None:
+    if db.query(KeyboardDevice).count() > 0:
+        return
+    for item in KEYBOARD_DEVICE_SEED_DATA:
+        db.add(KeyboardDevice(**item))
     db.commit()

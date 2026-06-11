@@ -132,3 +132,29 @@ class KeycapStats(BaseModel):
     priced_count: int
     by_brand: list[GroupCount]
     by_material: list[GroupCount]
+
+
+class KeyboardDeviceBase(BaseModel):
+    name: str = Field(..., min_length=1, max_length=200)
+    layout: str = Field(..., min_length=1, max_length=50)
+    switch_type: str = Field(..., min_length=1, max_length=100)
+    purchase_date: datetime
+    notes: str | None = None
+
+
+class KeyboardDeviceCreate(KeyboardDeviceBase):
+    pass
+
+
+class KeyboardDeviceUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=200)
+    layout: str | None = Field(default=None, min_length=1, max_length=50)
+    switch_type: str | None = Field(default=None, min_length=1, max_length=100)
+    purchase_date: datetime | None = None
+    notes: str | None = None
+
+
+class KeyboardDeviceResponse(KeyboardDeviceBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
