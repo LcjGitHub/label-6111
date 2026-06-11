@@ -53,7 +53,7 @@ export default function StatsPage() {
           收藏统计
         </Title>
         <Row gutter={16}>
-          <Col xs={24} sm={12}>
+          <Col xs={24} sm={12} md={6}>
             <Card loading={loading}>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 14, color: '#666', marginBottom: 8 }}>键帽总数量</div>
@@ -63,7 +63,7 @@ export default function StatsPage() {
               </div>
             </Card>
           </Col>
-          <Col xs={24} sm={12}>
+          <Col xs={24} sm={12} md={6}>
             <Card loading={loading}>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 14, color: '#666', marginBottom: 8 }}>购入价合计 (¥)</div>
@@ -73,9 +73,7 @@ export default function StatsPage() {
               </div>
             </Card>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col xs={24} sm={12}>
+          <Col xs={24} sm={12} md={6}>
             <Card loading={loading}>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 14, color: '#666', marginBottom: 8 }}>平均购入价 (¥)</div>
@@ -85,12 +83,12 @@ export default function StatsPage() {
               </div>
             </Card>
           </Col>
-          <Col xs={24} sm={12}>
+          <Col xs={24} sm={12} md={6}>
             <Card loading={loading}>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 14, color: '#666', marginBottom: 8 }}>有价记录数</div>
                 <div style={{ fontSize: 36, fontWeight: 600, color: '#fa8c16' }}>
-                  {stats.priced_count}
+                  {stats.avg_purchase_price !== null ? stats.priced_count : '—'}
                 </div>
               </div>
             </Card>
