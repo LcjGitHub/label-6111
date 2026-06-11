@@ -43,3 +43,8 @@ export async function updateWishlist(
 export async function deleteWishlist(id: number): Promise<void> {
   await client.delete(`/wishlists/${id}`);
 }
+
+export async function convertWishlist(id: number): Promise<number> {
+  const { data } = await client.post<{ keycap_id: number }>(`/wishlists/${id}/convert`);
+  return data.keycap_id;
+}

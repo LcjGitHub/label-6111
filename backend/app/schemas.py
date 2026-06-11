@@ -86,6 +86,10 @@ class WishlistResponse(WishlistBase):
     id: int
 
 
+class WishlistConvertResponse(BaseModel):
+    keycap_id: int
+
+
 class KeyboardBuildBase(BaseModel):
     keyboard_name: str = Field(..., min_length=1, max_length=200)
     keycap_id: int = Field(..., ge=1)

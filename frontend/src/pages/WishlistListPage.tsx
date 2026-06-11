@@ -12,9 +12,9 @@ import {
   message,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { PlusOutlined, SearchOutlined, StarOutlined } from '@ant-design/icons';
+import { HeartOutlined, PlusOutlined, SearchOutlined, StarOutlined } from '@ant-design/icons';
 
-import { deleteWishlist, fetchWishlists } from '../api/wishlists';
+import { convertWishlist, deleteWishlist, fetchWishlists } from '../api/wishlists';
 import type { Wishlist } from '../types/wishlist';
 
 const { Title } = Typography;
@@ -73,6 +73,18 @@ export default function WishlistListPage() {
     }
   };
 
+  const handleConvert = async (id: number) => {
+    try {
+      const keycapId = await convertWishlist(id);
+      messageApi.success('已转为收藏，即将跳转到键帽编辑页');
+      setTimeout(() => {
+        navigate(`/keycaps/${keycapId}/edit`);
+      }, 800);
+    } catch {
+      messageApi.error('转为收藏失败');
+    }
+  };
+
   const columns: ColumnsType<Wishlist> = [
     { title: '名称', dataIndex: 'name', key: 'name' },
     { title: '品牌', dataIndex: 'brand', key: 'brand', width: 100 },
@@ -101,9 +113,16 @@ export default function WishlistListPage() {
     {
       title: '操作',
       key: 'actions',
-      width: 160,
+      width: 260,
       render: (_, record) => (
         <Space>
+          <Button
+            type="link"
+            icon={<HeartOutlined />}
+            onClick={() => handleConvert(record.id)}
+          >
+            转为收藏
+          </Button>
           <Button
             type="link"
             onClick={() => navigate(`/wishlists/${record.id}/edit`)}
