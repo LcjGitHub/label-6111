@@ -2,6 +2,8 @@ import { Layout, Menu, Typography } from 'antd';
 import type { MenuProps } from 'antd';
 import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
+import BrandFormPage from './pages/BrandFormPage';
+import BrandListPage from './pages/BrandListPage';
 import KeycapFormPage from './pages/KeycapFormPage';
 import KeycapListPage from './pages/KeycapListPage';
 import WishlistFormPage from './pages/WishlistFormPage';
@@ -16,7 +18,9 @@ export default function App() {
 
   const selectedKey = location.pathname.startsWith('/wishlists')
     ? '/wishlists'
-    : '/';
+    : location.pathname.startsWith('/brands')
+      ? '/brands'
+      : '/';
 
   const menuItems: MenuProps['items'] = [
     {
@@ -28,6 +32,11 @@ export default function App() {
       key: '/wishlists',
       label: '心愿单',
       onClick: () => navigate('/wishlists'),
+    },
+    {
+      key: '/brands',
+      label: '品牌管理',
+      onClick: () => navigate('/brands'),
     },
   ];
 
@@ -64,6 +73,9 @@ export default function App() {
           <Route path="/wishlists" element={<WishlistListPage />} />
           <Route path="/wishlists/new" element={<WishlistFormPage />} />
           <Route path="/wishlists/:id/edit" element={<WishlistFormPage />} />
+          <Route path="/brands" element={<BrandListPage />} />
+          <Route path="/brands/new" element={<BrandFormPage />} />
+          <Route path="/brands/:id/edit" element={<BrandFormPage />} />
         </Routes>
       </Content>
     </Layout>

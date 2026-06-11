@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.models import Keycap, Wishlist
+from app.models import Brand, Keycap, Wishlist
 
 SEED_DATA = [
     {
@@ -78,6 +78,36 @@ def seed_keycaps(db: Session) -> None:
         return
     for item in SEED_DATA:
         db.add(Keycap(**item))
+    db.commit()
+
+
+BRAND_SEED_DATA = [
+    {
+        "name": "GMK",
+        "origin": "德国",
+        "website": "https://www.gmkkeycaps.com",
+        "notes": "德国顶级键帽制造商，以高精度双射工艺闻名",
+    },
+    {
+        "name": "Cherry",
+        "origin": "德国",
+        "website": "https://www.cherry.de",
+        "notes": "Cherry MX 轴体创始者，也生产原厂高度键帽",
+    },
+    {
+        "name": "SP (Signature Plastics)",
+        "origin": "美国",
+        "website": "https://www.signatureplastics.com",
+        "notes": "SA 与 DSA 等球帽高度的制造商，美式复古风格",
+    },
+]
+
+
+def seed_brands(db: Session) -> None:
+    if db.query(Brand).count() > 0:
+        return
+    for item in BRAND_SEED_DATA:
+        db.add(Brand(**item))
     db.commit()
 
 

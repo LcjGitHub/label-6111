@@ -1,6 +1,30 @@
 from pydantic import BaseModel, ConfigDict, Field
 
 
+class BrandBase(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    origin: str | None = Field(default=None, max_length=200)
+    website: str | None = Field(default=None, max_length=500)
+    notes: str | None = None
+
+
+class BrandCreate(BrandBase):
+    pass
+
+
+class BrandUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=100)
+    origin: str | None = Field(default=None, max_length=200)
+    website: str | None = Field(default=None, max_length=500)
+    notes: str | None = None
+
+
+class BrandResponse(BrandBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+
+
 class KeycapBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=200)
     brand: str = Field(..., min_length=1, max_length=100)
