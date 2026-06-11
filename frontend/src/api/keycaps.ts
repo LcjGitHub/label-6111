@@ -7,10 +7,12 @@ const client = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-export async function fetchKeycaps(colorScheme?: string): Promise<Keycap[]> {
-  const { data } = await client.get<Keycap[]>('/keycaps', {
-    params: colorScheme ? { color_scheme: colorScheme } : undefined,
-  });
+export async function fetchKeycaps(params?: {
+  color_scheme?: string;
+  brand?: string;
+  material?: string;
+}): Promise<Keycap[]> {
+  const { data } = await client.get<Keycap[]>('/keycaps', { params });
   return data;
 }
 

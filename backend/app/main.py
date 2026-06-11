@@ -117,10 +117,16 @@ def delete_brand(brand_id: int, db: DbSession):
 def list_keycaps(
     db: DbSession,
     color_scheme: str | None = Query(default=None, description="按配色名搜索"),
+    brand: str | None = Query(default=None, description="按品牌搜索"),
+    material: str | None = Query(default=None, description="按材质搜索"),
 ):
     query = db.query(Keycap)
     if color_scheme:
         query = query.filter(Keycap.color_scheme.ilike(f"%{color_scheme}%"))
+    if brand:
+        query = query.filter(Keycap.brand.ilike(f"%{brand}%"))
+    if material:
+        query = query.filter(Keycap.material.ilike(f"%{material}%"))
     return query.order_by(Keycap.id.desc()).all()
 
 

@@ -22,20 +22,30 @@ export default function KeycapListPage() {
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<Keycap[]>([]);
-  const [search, setSearch] = useState('');
-  const [query, setQuery] = useState('');
+  const [colorSchemeSearch, setColorSchemeSearch] = useState('');
+  const [brandSearch, setBrandSearch] = useState('');
+  const [materialSearch, setMaterialSearch] = useState('');
+  const [colorSchemeQuery, setColorSchemeQuery] = useState('');
+  const [brandQuery, setBrandQuery] = useState('');
+  const [materialQuery, setMaterialQuery] = useState('');
 
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const items = await fetchKeycaps(query || undefined);
+      const params: { color_scheme?: string; brand?: string; material?: string } = {};
+      if (colorSchemeQuery) params.color_scheme = colorSchemeQuery;
+      if (brandQuery) params.brand = brandQuery;
+      if (materialQuery) params.material = materialQuery;
+      const items = await fetchKeycaps(
+        Object.keys(params).length > 0 ? params : undefined,
+      );
       setData(items);
     } catch {
       messageApi.error('加载键帽列表失败');
     } finally {
       setLoading(false);
     }
-  }, [messageApi, query]);
+  }, [messageApi, colorSchemeQuery, brandQuery, materialQuery]);
 
   useEffect(() => {
     loadData();
@@ -108,15 +118,35 @@ export default function KeycapListPage() {
             新增键帽
           </Button>
         </Space>
-        <Input.Search
-          placeholder="按配色名搜索"
-          allowClear
-          enterButton={<SearchOutlined />}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onSearch={(value) => setQuery(value.trim())}
-          style={{ maxWidth: 360 }}
-        />
+        <Space wrap>
+          <Input.Search
+            placeholder="按配色名搜索"
+            allowClear
+            enterButton={<SearchOutlined />}
+            value={colorSchemeSearch}
+            onChange={(e) => setColorSchemeSearch(e.target.value)}
+            onSearch={(value) => setColorSchemeQuery(value.trim())}
+            style={{ width: 260 }}
+          />
+          <Input.Search
+            placeholder="按品牌搜索"
+            allowClear
+            enterButton={<SearchOutlined />}
+            value={brandSearch}
+            onChange={(e) => setBrandSearch(e.target.value)}
+            onSearch={(value) => setBrandQuery(value.trim())}
+            style={{ width: 220 }}
+          />
+          <Input.Search
+            placeholder="按材质搜索"
+            allowClear
+            enterButton={<SearchOutlined />}
+            value={materialSearch}
+            onChange={(e) => setMaterialSearch(e.target.value)}
+            onSearch={(value) => setMaterialQuery(value.trim())}
+            style={{ width: 220 }}
+          />
+        </Space>
         <Table
           rowKey="id"
           loading={loading}
