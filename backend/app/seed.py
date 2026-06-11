@@ -124,13 +124,13 @@ def seed_wishlists(db: Session) -> None:
 KEYBOARD_BUILD_SEED_DATA = [
     {
         "keyboard_name": "Keychron Q1",
-        "keycap_id": 1,
+        "keycap_name": "1976",
         "install_date": datetime(2025, 12, 20),
         "notes": "首次组装，搭配复古 1976 配色，手感极佳",
     },
     {
         "keyboard_name": "HHKB Professional HYBRID",
-        "keycap_id": 3,
+        "keycap_name": "Dracula",
         "install_date": datetime(2026, 3, 15),
         "notes": "程序员专属，Dracula 暗夜紫粉配色提升编码心情",
     },
@@ -140,6 +140,12 @@ KEYBOARD_BUILD_SEED_DATA = [
 def seed_keyboard_builds(db: Session) -> None:
     if db.query(KeyboardBuild).count() > 0:
         return
+    keycaps_by_name = {k.name: k for k in db.query(Keycap).all()}
     for item in KEYBOARD_BUILD_SEED_DATA:
-        db.add(KeyboardBuild(**item))
+        keycap = keycaps_by_name.get(item["keycap_name"])
+        if not keycap:
+            continue
+        build_data = {k: v for k, v in item.items() if k != "keycap_name"}
+        build_data["keycap_id"] = keycap.id
+        db.add(KeyboardBuild(**build_data))
     db.commit()

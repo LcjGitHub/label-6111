@@ -8,6 +8,7 @@ import {
   Input,
   Select,
   Space,
+  Spin,
   Typography,
   message,
 } from 'antd';
@@ -32,46 +33,36 @@ export default function KeyboardBuildFormPage() {
   const navigate = useNavigate();
   const [form] = Form.useForm<KeyboardBuildFormValues>();
   const [messageApi, contextHolder] = message.useMessage();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [keycaps, setKeycaps] = useState<Keycap[]>([]);
-  const [keycapsLoading, setKeycapsLoading] = useState(false);
 
   useEffect(() => {
-    const loadKeycaps = async () => {
-      setKeycapsLoading(true);
-      try {
-        const items = await fetchKeycaps();
-        setKeycaps(items);
-      } catch {
-        messageApi.error('加载键帽列表失败');
-      } finally {
-        setKeycapsLoading(false);
-      }
-    };
-    loadKeycaps();
-  }, [messageApi]);
-
-  useEffect(() => {
-    if (!isEdit || !id) return;
-
-    const load = async () => {
+    const loadAll = async () => {
       setLoading(true);
       try {
-        const build = await fetchKeyboardBuild(Number(id));
-        form.setFieldsValue({
-          ...build,
-          install_date: build.install_date,
-        });
+        const keycapsResult = await fetchKeycaps();
+        setKeycaps(keycapsResult);
+
+        if (isEdit && id) {
+          const build = await fetchKeyboardBuild(Number(id));
+          form.setFieldsValue({
+            ...build,
+            install_date: build.install_date,
+          });
+        } else {
+          form.setFieldsValue({ install_date: dayjs().format('YYYY-MM-DD') });
+        }
       } catch {
-        messageApi.error('加载配装记录失败');
+        messageApi.error(isEdit ? '加载配装记录失败' : '加载键帽列表失败');
         navigate('/keyboard-builds');
+        return;
       } finally {
         setLoading(false);
       }
     };
 
-    load();
+    loadAll();
   }, [form, id, isEdit, messageApi, navigate]);
 
   const onFinish = async (values: KeyboardBuildFormValues) => {
@@ -97,17 +88,33 @@ export default function KeyboardBuildFormPage() {
     label: `${k.name} - ${k.color_scheme}`,
   }));
 
+  if (loading) {
+    return (
+      <>
+        {contextHolder}
+        <Card style={{ maxWidth: 640 }}>
+          <Space
+            direction="vertical"
+            size="middle"
+            style={{ width: '100%', alignItems: 'center', padding: '40px 0' }}
+          >
+            <Spin size="large" />
+          </Space>
+        </Card>
+      </>
+    );
+  }
+
   return (
     <>
       {contextHolder}
-      <Card loading={loading || keycapsLoading} style={{ maxWidth: 640 }}>
+      <Card style={{ maxWidth: 640 }}>
         <Title level={3}>{isEdit ? '编辑配装记录' : '新增配装记录'}</Title>
         <Form
           form={form}
           layout="vertical"
           onFinish={onFinish}
-          disabled={loading || keycapsLoading}
-          initialValues={{ install_date: dayjs() }}
+          disabled={submitting}
         >
           <Form.Item
             label="键盘名称"

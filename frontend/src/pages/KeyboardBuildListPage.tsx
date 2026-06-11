@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Button,
   Input,
@@ -87,12 +87,9 @@ export default function KeyboardBuildListPage() {
       width: 160,
       render: (_, record) => (
         <Space>
-          <Button
-            type="link"
-            onClick={() => navigate(`/keyboard-builds/${record.id}/edit`)}
-          >
+          <Link to={`/keyboard-builds/${record.id}/edit`} style={{ color: '#1677ff' }}>
             编辑
-          </Button>
+          </Link>
           <Popconfirm title="确定删除？" onConfirm={() => handleDelete(record.id)}>
             <Button type="link" danger>
               删除
