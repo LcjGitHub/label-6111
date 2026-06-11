@@ -47,7 +47,7 @@ SEED_DATA = [
 
 WISHLIST_SEED_DATA = [
     {
-        "name": "Laser",
+        "name": "激光",
         "brand": "GMK",
         "color_scheme": "Cyan Magenta",
         "expected_price": 1100.0,
@@ -55,7 +55,7 @@ WISHLIST_SEED_DATA = [
         "notes": "赛博朋克激光配色，优先级最高",
     },
     {
-        "name": "Botanical",
+        "name": "植物学",
         "brand": "GMK",
         "color_scheme": "Green Cream",
         "expected_price": 900.0,
@@ -63,12 +63,12 @@ WISHLIST_SEED_DATA = [
         "notes": "植物学绿白配色，清新自然",
     },
     {
-        "name": "Mitolet",
+        "name": "迷彩电",
         "brand": "SA",
         "color_scheme": "Purple Orange",
         "expected_price": 1200.0,
         "priority": 4,
-        "notes": "Mito 经典紫橙撞色，球帽高度",
+        "notes": "迷彩电经典紫橙撞色，球帽高度",
     },
 ]
 
@@ -82,8 +82,8 @@ def seed_keycaps(db: Session) -> None:
 
 
 def seed_wishlists(db: Session) -> None:
-    if db.query(Wishlist).count() > 0:
-        return
+    existing_names = {w.name for w in db.query(Wishlist).all()}
     for item in WISHLIST_SEED_DATA:
-        db.add(Wishlist(**item))
+        if item["name"] not in existing_names:
+            db.add(Wishlist(**item))
     db.commit()

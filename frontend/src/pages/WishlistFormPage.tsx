@@ -24,7 +24,7 @@ export default function WishlistFormPage() {
   const navigate = useNavigate();
   const [form] = Form.useForm<WishlistFormValues>();
   const [messageApi, contextHolder] = message.useMessage();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(isEdit);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {

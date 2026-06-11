@@ -1,5 +1,6 @@
 import { Layout, Menu, Typography } from 'antd';
-import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import type { MenuProps } from 'antd';
+import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import KeycapFormPage from './pages/KeycapFormPage';
 import KeycapListPage from './pages/KeycapListPage';
@@ -11,10 +12,24 @@ const { Title } = Typography;
 
 export default function App() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const selectedKey = location.pathname.startsWith('/wishlists')
     ? '/wishlists'
     : '/';
+
+  const menuItems: MenuProps['items'] = [
+    {
+      key: '/',
+      label: '键帽收藏',
+      onClick: () => navigate('/'),
+    },
+    {
+      key: '/wishlists',
+      label: '心愿单',
+      onClick: () => navigate('/wishlists'),
+    },
+  ];
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -36,15 +51,10 @@ export default function App() {
           theme="dark"
           mode="horizontal"
           selectedKeys={[selectedKey]}
-          style={{ background: 'transparent', borderBottom: 'none', flex: 1 }}
-        >
-          <Menu.Item key="/">
-            <Link to="/">键帽收藏</Link>
-          </Menu.Item>
-          <Menu.Item key="/wishlists">
-            <Link to="/wishlists">心愿单</Link>
-          </Menu.Item>
-        </Menu>
+          items={menuItems}
+          disabledOverflow
+          style={{ background: 'transparent', borderBottom: 'none', flex: 1, minWidth: 200 }}
+        />
       </Header>
       <Content style={{ padding: 24, maxWidth: 1200, margin: '0 auto', width: '100%' }}>
         <Routes>

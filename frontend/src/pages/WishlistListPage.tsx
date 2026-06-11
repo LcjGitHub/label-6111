@@ -78,10 +78,10 @@ export default function WishlistListPage() {
     { title: '品牌', dataIndex: 'brand', key: 'brand', width: 100 },
     { title: '配色', dataIndex: 'color_scheme', key: 'color_scheme', width: 140 },
     {
-      title: '期望价格 (¥)',
+      title: '期望购入价 (¥)',
       dataIndex: 'expected_price',
       key: 'expected_price',
-      width: 130,
+      width: 140,
       render: (value: number | null) =>
         value != null ? value.toFixed(2) : '-',
     },
