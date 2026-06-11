@@ -46,6 +46,7 @@ export default function WishlistListPage() {
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
   const [priorityFilter, setPriorityFilter] = useState<number | undefined>();
+  const [convertingId, setConvertingId] = useState<number | null>(null);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -74,14 +75,16 @@ export default function WishlistListPage() {
   };
 
   const handleConvert = async (id: number) => {
+    setConvertingId(id);
     try {
       const keycapId = await convertWishlist(id);
       messageApi.success('已转为收藏，即将跳转到键帽编辑页');
-      setTimeout(() => {
-        navigate(`/keycaps/${keycapId}/edit`);
-      }, 800);
+      await loadData();
+      navigate(`/keycaps/${keycapId}/edit`);
     } catch {
       messageApi.error('转为收藏失败');
+    } finally {
+      setConvertingId(null);
     }
   };
 
@@ -116,13 +119,16 @@ export default function WishlistListPage() {
       width: 260,
       render: (_, record) => (
         <Space>
-          <Button
-            type="link"
-            icon={<HeartOutlined />}
-            onClick={() => handleConvert(record.id)}
-          >
-            转为收藏
-          </Button>
+          <Popconfirm title="确定转为收藏？" onConfirm={() => handleConvert(record.id)}>
+            <Button
+              type="link"
+              icon={<HeartOutlined />}
+              loading={convertingId === record.id}
+              disabled={convertingId !== null && convertingId !== record.id}
+            >
+              转为收藏
+            </Button>
+          </Popconfirm>
           <Button
             type="link"
             onClick={() => navigate(`/wishlists/${record.id}/edit`)}
