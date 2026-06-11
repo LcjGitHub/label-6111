@@ -162,6 +162,22 @@ def get_keycap_stats(db: DbSession):
         db.query(func.sum(func.coalesce(Keycap.purchase_price, 0))).scalar() or 0
     )
 
+    priced_count = (
+        db.query(func.count(Keycap.id))
+        .filter(Keycap.purchase_price.isnot(None))
+        .scalar() or 0
+    )
+
+    avg_purchase_price = None
+    if priced_count > 0:
+        avg_value = (
+            db.query(func.avg(Keycap.purchase_price))
+            .filter(Keycap.purchase_price.isnot(None))
+            .scalar()
+        )
+        if avg_value is not None:
+            avg_purchase_price = round(float(avg_value), 2)
+
     by_brand = (
         db.query(Keycap.brand, func.count(Keycap.id).label("count"))
         .group_by(Keycap.brand)
@@ -178,6 +194,8 @@ def get_keycap_stats(db: DbSession):
     return KeycapStats(
         total_count=total_count,
         total_purchase_price=float(total_purchase_price),
+        avg_purchase_price=avg_purchase_price,
+        priced_count=priced_count,
         by_brand=[{"name": name, "count": count} for name, count in by_brand],
         by_material=[{"name": name, "count": count} for name, count in by_material],
     )

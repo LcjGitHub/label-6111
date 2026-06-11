@@ -13,6 +13,8 @@ export default function StatsPage() {
   const [stats, setStats] = useState<KeycapStats>({
     total_count: 0,
     total_purchase_price: 0,
+    avg_purchase_price: null,
+    priced_count: 0,
     by_brand: [],
     by_material: [],
   });
@@ -67,6 +69,28 @@ export default function StatsPage() {
                 <div style={{ fontSize: 14, color: '#666', marginBottom: 8 }}>购入价合计 (¥)</div>
                 <div style={{ fontSize: 36, fontWeight: 600, color: '#52c41a' }}>
                   {stats.total_purchase_price.toFixed(2)}
+                </div>
+              </div>
+            </Card>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col xs={24} sm={12}>
+            <Card loading={loading}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 14, color: '#666', marginBottom: 8 }}>平均购入价 (¥)</div>
+                <div style={{ fontSize: 36, fontWeight: 600, color: '#722ed1' }}>
+                  {stats.avg_purchase_price !== null ? stats.avg_purchase_price.toFixed(2) : '—'}
+                </div>
+              </div>
+            </Card>
+          </Col>
+          <Col xs={24} sm={12}>
+            <Card loading={loading}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 14, color: '#666', marginBottom: 8 }}>有价记录数</div>
+                <div style={{ fontSize: 36, fontWeight: 600, color: '#fa8c16' }}>
+                  {stats.priced_count}
                 </div>
               </div>
             </Card>

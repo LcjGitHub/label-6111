@@ -123,5 +123,7 @@ class GroupCount(BaseModel):
 class KeycapStats(BaseModel):
     total_count: int
     total_purchase_price: float
+    avg_purchase_price: float | None
+    priced_count: int
     by_brand: list[GroupCount]
     by_material: list[GroupCount]

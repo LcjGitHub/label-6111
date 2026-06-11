@@ -27,6 +27,8 @@ export interface GroupCount {
 export interface KeycapStats {
   total_count: number;
   total_purchase_price: number;
+  avg_purchase_price: number | null;
+  priced_count: number;
   by_brand: GroupCount[];
   by_material: GroupCount[];
 }
