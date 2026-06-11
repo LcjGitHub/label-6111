@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Button,
   Input,
@@ -76,9 +76,9 @@ export default function KeycapListPage() {
       width: 220,
       render: (_, record) => (
         <Space>
-          <Button type="link" onClick={() => navigate(`/keycaps/${record.id}`)}>
+          <Link to={`/keycaps/${record.id}`} style={{ color: '#1677ff' }}>
             查看
-          </Button>
+          </Link>
           <Button type="link" onClick={() => navigate(`/keycaps/${record.id}/edit`)}>
             编辑
           </Button>

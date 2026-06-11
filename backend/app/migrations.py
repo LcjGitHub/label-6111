@@ -38,4 +38,17 @@ def _add_keycap_timestamps(db: Session) -> None:
                 )
             )
 
+        conn.execute(
+            text(
+                f"UPDATE keycaps SET created_at = '{now}' "
+                f"WHERE created_at IS NULL OR created_at = ''"
+            )
+        )
+        conn.execute(
+            text(
+                f"UPDATE keycaps SET updated_at = '{now}' "
+                f"WHERE updated_at IS NULL OR updated_at = ''"
+            )
+        )
+
         conn.commit()

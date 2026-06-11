@@ -11,10 +11,10 @@ import {
   message,
 } from 'antd';
 import { ArrowLeftOutlined, EditOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
 
 import { fetchKeycap } from '../api/keycaps';
 import type { Keycap } from '../types/keycap';
+import { formatDateTime } from '../utils/date';
 
 const { Title } = Typography;
 
@@ -51,9 +51,6 @@ export default function KeycapDetailPage() {
       </div>
     );
   }
-
-  const formatDate = (dateStr: string) =>
-    dayjs(dateStr).format('YYYY-MM-DD HH:mm:ss');
 
   return (
     <>
@@ -102,10 +99,10 @@ export default function KeycapDetailPage() {
               {keycap.notes || '-'}
             </Descriptions.Item>
             <Descriptions.Item label="创建时间">
-              {formatDate(keycap.created_at)}
+              {formatDateTime(keycap.created_at)}
             </Descriptions.Item>
             <Descriptions.Item label="更新时间">
-              {formatDate(keycap.updated_at)}
+              {formatDateTime(keycap.updated_at)}
             </Descriptions.Item>
           </Descriptions>
         </Space>
