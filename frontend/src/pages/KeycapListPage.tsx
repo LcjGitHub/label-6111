@@ -124,7 +124,13 @@ export default function KeycapListPage() {
             allowClear
             enterButton={<SearchOutlined />}
             value={colorSchemeSearch}
-            onChange={(e) => setColorSchemeSearch(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              setColorSchemeSearch(value);
+              if (!value) {
+                setColorSchemeQuery('');
+              }
+            }}
             onSearch={(value) => setColorSchemeQuery(value.trim())}
             style={{ width: 260 }}
           />
@@ -133,7 +139,13 @@ export default function KeycapListPage() {
             allowClear
             enterButton={<SearchOutlined />}
             value={brandSearch}
-            onChange={(e) => setBrandSearch(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              setBrandSearch(value);
+              if (!value) {
+                setBrandQuery('');
+              }
+            }}
             onSearch={(value) => setBrandQuery(value.trim())}
             style={{ width: 220 }}
           />
@@ -142,7 +154,13 @@ export default function KeycapListPage() {
             allowClear
             enterButton={<SearchOutlined />}
             value={materialSearch}
-            onChange={(e) => setMaterialSearch(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              setMaterialSearch(value);
+              if (!value) {
+                setMaterialQuery('');
+              }
+            }}
             onSearch={(value) => setMaterialQuery(value.trim())}
             style={{ width: 220 }}
           />
