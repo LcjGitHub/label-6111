@@ -16,3 +16,15 @@ export interface KeycapFormValues {
   purchase_price?: number | null;
   notes?: string | null;
 }
+
+export interface GroupCount {
+  name: string;
+  count: number;
+}
+
+export interface KeycapStats {
+  total_count: number;
+  total_purchase_price: number;
+  by_brand: GroupCount[];
+  by_material: GroupCount[];
+}

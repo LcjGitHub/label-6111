@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import Base, engine, get_db
@@ -12,6 +13,7 @@ from app.schemas import (
     BrandUpdate,
     KeycapCreate,
     KeycapResponse,
+    KeycapStats,
     KeycapUpdate,
     WishlistCreate,
     WishlistResponse,
@@ -203,3 +205,31 @@ def delete_wishlist(wishlist_id: int, db: DbSession):
         raise HTTPException(status_code=404, detail="心愿单不存在")
     db.delete(wishlist)
     db.commit()
+
+
+@app.get("/api/keycaps/stats", response_model=KeycapStats)
+def get_keycap_stats(db: DbSession):
+    total_count = db.query(func.count(Keycap.id)).scalar() or 0
+    total_purchase_price = (
+        db.query(func.sum(func.coalesce(Keycap.purchase_price, 0))).scalar() or 0
+    )
+
+    by_brand = (
+        db.query(Keycap.brand, func.count(Keycap.id).label("count"))
+        .group_by(Keycap.brand)
+        .order_by(func.count(Keycap.id).desc())
+        .all()
+    )
+    by_material = (
+        db.query(Keycap.material, func.count(Keycap.id).label("count"))
+        .group_by(Keycap.material)
+        .order_by(func.count(Keycap.id).desc())
+        .all()
+    )
+
+    return KeycapStats(
+        total_count=total_count,
+        total_purchase_price=float(total_purchase_price),
+        by_brand=[{"name": name, "count": count} for name, count in by_brand],
+        by_material=[{"name": name, "count": count} for name, count in by_material],
+    )

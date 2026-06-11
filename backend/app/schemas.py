@@ -79,3 +79,15 @@ class WishlistResponse(WishlistBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+
+
+class GroupCount(BaseModel):
+    name: str
+    count: int
+
+
+class KeycapStats(BaseModel):
+    total_count: int
+    total_purchase_price: float
+    by_brand: list[GroupCount]
+    by_material: list[GroupCount]

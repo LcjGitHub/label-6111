@@ -6,6 +6,7 @@ import BrandFormPage from './pages/BrandFormPage';
 import BrandListPage from './pages/BrandListPage';
 import KeycapFormPage from './pages/KeycapFormPage';
 import KeycapListPage from './pages/KeycapListPage';
+import StatsPage from './pages/StatsPage';
 import WishlistFormPage from './pages/WishlistFormPage';
 import WishlistListPage from './pages/WishlistListPage';
 
@@ -20,13 +21,20 @@ export default function App() {
     ? '/wishlists'
     : location.pathname.startsWith('/brands')
       ? '/brands'
-      : '/';
+      : location.pathname.startsWith('/stats')
+        ? '/stats'
+        : '/';
 
   const menuItems: MenuProps['items'] = [
     {
       key: '/',
       label: '键帽收藏',
       onClick: () => navigate('/'),
+    },
+    {
+      key: '/stats',
+      label: '统计',
+      onClick: () => navigate('/stats'),
     },
     {
       key: '/wishlists',
@@ -70,6 +78,7 @@ export default function App() {
           <Route path="/" element={<KeycapListPage />} />
           <Route path="/keycaps/new" element={<KeycapFormPage />} />
           <Route path="/keycaps/:id/edit" element={<KeycapFormPage />} />
+          <Route path="/stats" element={<StatsPage />} />
           <Route path="/wishlists" element={<WishlistListPage />} />
           <Route path="/wishlists/new" element={<WishlistFormPage />} />
           <Route path="/wishlists/:id/edit" element={<WishlistFormPage />} />

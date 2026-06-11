@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import type { Keycap, KeycapFormValues } from '../types/keycap';
+import type { Keycap, KeycapFormValues, KeycapStats } from '../types/keycap';
 
 const client = axios.create({
   baseURL: '/api',
@@ -34,4 +34,9 @@ export async function updateKeycap(
 
 export async function deleteKeycap(id: number): Promise<void> {
   await client.delete(`/keycaps/${id}`);
+}
+
+export async function fetchKeycapStats(): Promise<KeycapStats> {
+  const { data } = await client.get<KeycapStats>('/keycaps/stats');
+  return data;
 }
